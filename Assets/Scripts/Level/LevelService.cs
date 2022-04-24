@@ -6,10 +6,13 @@ public class LevelService : ILevelService
 {
     // Start is called before the first frame update
     private LevelGenerator levelGenerator;
+    private IPlayerService playerService;
 
-    public LevelService(FixedBlocks fixedBlockPrefab, BreakableBlocks breakableBlockPrefab, FloorBlocks floorBlockPrefab)
+    public LevelService(FixedBlocks fixedBlockPrefab, BreakableBlocks breakableBlockPrefab, FloorBlocks floorBlockPrefab, IPlayerService playerService, IEnemyService enemyService)
     {
-        levelGenerator = new LevelGenerator(fixedBlockPrefab, breakableBlockPrefab, floorBlockPrefab, this);
+        this.playerService = playerService;
+        this.playerService.SetLevelService(this);
+        levelGenerator = new LevelGenerator(fixedBlockPrefab, breakableBlockPrefab, floorBlockPrefab, playerService, enemyService, this);
     }
 
     public void EmptyGrid(Vector2 position)

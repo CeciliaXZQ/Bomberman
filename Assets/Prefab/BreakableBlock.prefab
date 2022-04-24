@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7487800308177916569}
   - component: {fileID: 9189736003604500540}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BreakableBlockSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,7 +50,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: bb21a9e4f2a50554bb80749ef919d66b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -70,7 +70,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7987151303939760886, guid: ccceeb5c00cf3154db1a212a4821f19c,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 8235325710820445309}
   - component: {fileID: 3329900858250176089}
   - component: {fileID: 2141578590594065999}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BreakableBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}

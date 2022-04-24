@@ -18,8 +18,13 @@ public class GameManager : MonoBehaviour
     public FixedBlocks fixedBlock;
     public BreakableBlocks breakableBlock;
     public FloorBlocks floorBlock;
+    public PlayerController playerController;
+    public EnemyController enemyPrefab;
+    public Bomb bombPrefab;
 
     ILevelService levelService;
+    IPlayerService playerService;
+    IEnemyService enemyService;
 
     private void Awake()
     {
@@ -37,8 +42,20 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        levelService = new LevelService(fixedBlock, breakableBlock, floorBlock);
+        playerService = new PlayerManager(playerController, bombPrefab, this);
+        enemyService = new EnemyService(enemyPrefab, this);
+        levelService = new LevelService(fixedBlock, breakableBlock, floorBlock, playerService, enemyService);
+        enemyService.SetLevelService(levelService);
 
         levelService.GenerateLevel();
     }
+    public void SetGameStatus(bool gameWon) => gameStatus?.Invoke(gameWon);
+
+    public void UpdateScore() => updateScore?.Invoke();
+
+    public void RestartGame()
+    {
+        restartGame?.Invoke();
+    }
+
 }

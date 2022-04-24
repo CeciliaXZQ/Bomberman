@@ -6,24 +6,30 @@ public class LevelGenerator : MonoBehaviour
 {
     public GameObject[,] gridArray;
     private List<Vector2> emptyGridList;
-    private int edgeCount = 2;
+    private int edgeCount = 0;
     private int gridWidth = 15, gridHeight = 11, enemyCount;
 
     private FixedBlocks fixedBlockPref;
     private FloorBlocks floorBlockPref;
     private BreakableBlocks breakableBlockPref;
     private GameObject levelHolder;
+    private IEnemyService enemyService;
 
+    IPlayerService playerService;
     LevelService levelService;
 
-    public LevelGenerator(FixedBlocks fixedBlockPrefab, BreakableBlocks breakableBlockPrefab, FloorBlocks floorBlockPrefab, LevelService levelService)
+    public LevelGenerator(FixedBlocks fixedBlockPrefab, BreakableBlocks breakableBlockPrefab, FloorBlocks floorBlockPrefab, IPlayerService playerService, IEnemyService enemyService, LevelService levelService)
     {
+        this.playerService = playerService;
         this.levelService = levelService;
         this.fixedBlockPref = fixedBlockPrefab;
         this.breakableBlockPref = breakableBlockPrefab;
         this.floorBlockPref = floorBlockPrefab;
+        this.enemyService = enemyService;
         gridWidth = (int)GameManager.singleton.gridSize.x;
         gridHeight = (int)GameManager.singleton.gridSize.y;
+        enemyCount = GameManager.singleton.enemyCount;
+        GameManager.singleton.restartGame += RestartGame;
     }
 
     ~LevelGenerator()
@@ -55,7 +61,7 @@ public class LevelGenerator : MonoBehaviour
     {
         emptyGridList = new List<Vector2>();
         gridArray = new GameObject[gridWidth + edgeCount, gridHeight + edgeCount];
-        Debug.Log(gridArray.Length);
+
         if (levelHolder == null)
             levelHolder = new GameObject();
         levelHolder.transform.position = Vector3.zero;
@@ -64,7 +70,9 @@ public class LevelGenerator : MonoBehaviour
         GenerateGrid();
         GenerateEdgeAndFloor();
         GenerateFixedBlock();
+        SpawnPlayer();
         GenerateBreakableBlock();
+        SpawnEnemies();
         emptyGridList.Clear();
     }
 
@@ -90,7 +98,7 @@ public class LevelGenerator : MonoBehaviour
             for (int x = 0; x < gridWidth + edgeCount; x++)
             {
                 //Check if we current position is at board edge, if so choose a random outer wall prefab from our array of outer wall tiles.
-                if (x == 0 || x == gridHeight + edgeCount-1 || y == 0 || y == gridWidth + edgeCount-1)
+                if (x == 0 || x == gridWidth + edgeCount-1 || y == 0 || y == gridHeight + edgeCount-1)
                 {
                     Edge(new Vector2(x, y));
                 }
@@ -124,9 +132,9 @@ public class LevelGenerator : MonoBehaviour
 
     void GenerateFixedBlock()
     {
-        for (int i = edgeCount; i < gridWidth; i += 2)
+        for (int i = 2; i < gridWidth-1; i += 2)
         {
-            for (int j = edgeCount; j < gridHeight; j += 2)
+            for (int j = 2; j < gridHeight-1; j += 2)
             {
                 Vector2 vector = new Vector2(i, j);
                 GameObject fixedBlock = Object.Instantiate(fixedBlockPref.gameObject, vector, Quaternion.identity);
@@ -151,6 +159,33 @@ public class LevelGenerator : MonoBehaviour
             breakableBlock.GetComponent<BreakableBlocks>().SetLevelService(levelService);
             emptyGridList.RemoveAt(k);
             gridArray[(int)vector.x, (int)vector.y] = breakableBlock;
+        }
+    }
+
+    void SpawnPlayer()
+    {
+        Vector2 spawnPos = new Vector2(1, gridHeight-2);
+        playerService.SpawnPlayer(spawnPos);
+        emptyGridList.Remove(spawnPos);
+
+        for (int i = 1; i < 5; i++)
+        {
+            for (int j = gridHeight; j > gridHeight - 4; j--)
+            {
+                Vector2 tempVector = new Vector2(i, j);
+                emptyGridList.Remove(tempVector);
+            }
+        }
+    }
+
+    void SpawnEnemies()
+    {
+        for (int i = 0; i < enemyCount; i++)
+        {
+            int k = Random.Range(0, emptyGridList.Count);
+            Vector2 vector = emptyGridList[k];
+            enemyService.SpawnEnemy(vector);
+            emptyGridList.RemoveAt(k);
         }
     }
 }
