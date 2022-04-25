@@ -88,7 +88,7 @@ public class UIController : MonoBehaviour
     {
         score = 000;
         TimeLeft = 200;
-        gameManager.playerController.health = 3;
+        gameManager.playerController.health = 30;
         scoreText.text = "Score: " + score;
         timerText.text = "Time left: " + TimeLeft;
         healthText.text = "Health: " + gameManager.playerController.health;

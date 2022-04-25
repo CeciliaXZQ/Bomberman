@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 
     public int m_MaxIterations = 2;
 
-    public int health = 3;
+    public int health = 30;
 
     public bool inDamage = false;
 
@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
     {
         m_Rigidbody = GetComponent<Rigidbody2D>();
         FindObjectOfType<CameraController>().AssignTarget(this);
-        health = 3;
+        health = 30;
     }
 
     // Update is called once per frame

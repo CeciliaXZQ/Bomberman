@@ -59,7 +59,7 @@ public class PlayerLibrary
     }
     public void PlayerDamaged()
     {
-        playerController.health -= 1;
+        playerController.health -= 10;
         playerManager.PlayerDamaged(playerController.health);
         if (playerController.health <= 0)
         {

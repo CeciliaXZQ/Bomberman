@@ -29,10 +29,7 @@ public class PlayerManager : IPlayerService
     {
         playerLibrary = new PlayerLibrary(playerController, bombPrefab.gameObject, superBombPrefab.gameObject, spawnPos, this, levelService);
     }
-    public int GetHealth()
-    {
-        return playerController.health;
-    }
+
     public void PlayerKilled()
     {
         gameManager.SetGameStatus(false);

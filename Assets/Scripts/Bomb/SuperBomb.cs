@@ -9,18 +9,24 @@ public class SuperBomb : MonoBehaviour
     [SerializeField] private int explosionArea = 0;
     [SerializeField] private GameObject explosionObj;
     private int timer = 0;
+    private int hitCount = 0;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.GetComponent<EnemyController>() != null)
         {
-            InvokeRepeating("Explode", 1f, 1f);
+            hitCount++;
+            if (hitCount <= 1)
+            {
+                InvokeRepeating("Explode", 1f, 1f);
+            }
         }
     }
 
     void Start()
     {
         GameManager.singleton.restartGame += RestartGame;
+        hitCount = 0;
     }
 
     void Update()

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemyController : MonoBehaviour, IDamagable, IKillable
 {
@@ -15,12 +16,27 @@ public class EnemyController : MonoBehaviour, IDamagable, IKillable
     [SerializeField] private Transform enemySprite;
     bool canMove, isCaged = true;
     WaitForSeconds waitTime = new WaitForSeconds(1f);
+    public int MaxHealth = 30;
+    [SerializeField]
+    private int health = 30;
+    public UnityEvent<float> OnHealthChange;
+
+    public int Health
+    {
+        get { return health; }
+        set
+        {
+            health = value;
+            OnHealthChange?.Invoke((float)Health / MaxHealth);
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
         startTime = Time.time;
         currentGrid = nextGrid = transform.position;
         canMove = CanMove();
+        Health = 30;
         if (canMove == true)
         {
             isCaged = false;
@@ -115,9 +131,13 @@ public class EnemyController : MonoBehaviour, IDamagable, IKillable
 
     public void Damage()
     {
-        levelService.EmptyGrid(currentGrid);
-        enemyService.RemoveEnemy(this);
-        Destroy(gameObject);
+        Health -= 10;
+        if (Health <= 0)
+        {
+            levelService.EmptyGrid(currentGrid);
+            enemyService.RemoveEnemy(this);
+            Destroy(gameObject);
+        }
     }
 
     void LookAT2D(Vector2 startPos, Vector2 endPos)
