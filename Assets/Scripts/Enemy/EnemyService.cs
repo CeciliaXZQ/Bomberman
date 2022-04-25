@@ -52,7 +52,6 @@ public class EnemyService : IEnemyService
         gameManager.UpdateScore();
         if (enemyControllers.Count <= 0)
         {
-            //TODO: fire game won event
             gameManager.SetGameStatus(true);
             return;
         }

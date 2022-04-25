@@ -8,11 +8,11 @@ public class LevelService : ILevelService
     private LevelGenerator levelGenerator;
     private IPlayerService playerService;
 
-    public LevelService(FixedBlocks fixedBlockPrefab, BreakableBlocks breakableBlockPrefab, FloorBlocks floorBlockPrefab, IPlayerService playerService, IEnemyService enemyService)
+    public LevelService(FixedBlocks fixedBlockPrefab, BreakableBlocks breakableBlockPrefab, FloorBlocks floorBlockPrefab, Door doorPrefab, IPlayerService playerService, IEnemyService enemyService)
     {
         this.playerService = playerService;
         this.playerService.SetLevelService(this);
-        levelGenerator = new LevelGenerator(fixedBlockPrefab, breakableBlockPrefab, floorBlockPrefab, playerService, enemyService, this);
+        levelGenerator = new LevelGenerator(fixedBlockPrefab, breakableBlockPrefab, floorBlockPrefab, doorPrefab, playerService, enemyService, this);
     }
 
     public void EmptyGrid(Vector2 position)

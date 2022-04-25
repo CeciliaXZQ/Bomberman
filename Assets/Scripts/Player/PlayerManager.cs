@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class PlayerManager : IPlayerService
 {
-    private PlayerController playerController;
     private PlayerLibrary playerLibrary;
+    private PlayerController playerController;
     private Bomb bombPrefab;
+    private SuperBomb superBombPrefab;
     private ILevelService levelService;
     private GameManager gameManager;
 
-    public PlayerManager(PlayerController playerController, Bomb bombPrefab, GameManager gameManager)
+    public PlayerManager(PlayerController playerController, Bomb bombPrefab, SuperBomb superBombPrefab, GameManager gameManager)
     {
         this.gameManager = gameManager;
         this.playerController = playerController;
         this.bombPrefab = bombPrefab;
+        this.superBombPrefab = superBombPrefab;
         gameManager.restartGame += RestartGame;
     }
 
@@ -25,16 +27,20 @@ public class PlayerManager : IPlayerService
 
     public void SpawnPlayer(Vector2 spawnPos)
     {
-        Debug.Log(spawnPos);
-        playerLibrary = new PlayerLibrary(playerController, bombPrefab.gameObject,spawnPos, this,
-        levelService);
+        playerLibrary = new PlayerLibrary(playerController, bombPrefab.gameObject, superBombPrefab.gameObject, spawnPos, this, levelService);
     }
-
+    public int GetHealth()
+    {
+        return playerController.health;
+    }
     public void PlayerKilled()
     {
-        //TODO: fire game lost event
         gameManager.SetGameStatus(false);
-        playerController = null;
+        playerLibrary = null;
+    }
+    public void PlayerDamaged(int health)
+    {
+        gameManager.UpdateHealth(health);
     }
 
     void RestartGame()
@@ -44,6 +50,12 @@ public class PlayerManager : IPlayerService
             playerLibrary.PlayerDestroy();
             playerLibrary = null;
         }
+    }
+
+    public void PlayerSurvived()
+    {
+        Debug.Log("WIN!!");
+        gameManager.SetGameStatus(true);
     }
 
     public GameObject GetPlayer()

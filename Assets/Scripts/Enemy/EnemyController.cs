@@ -56,10 +56,8 @@ public class EnemyController : MonoBehaviour, IDamagable, IKillable
 
         if (gridPositions.Count > 0)
         {
-            Debug.Log("Can MOVE");
             return true;
         }
-        Debug.Log("Can NOT MOVE");
         return false;
     }
 
@@ -124,10 +122,6 @@ public class EnemyController : MonoBehaviour, IDamagable, IKillable
 
     void LookAT2D(Vector2 startPos, Vector2 endPos)
     {
-        //Vector2 diff = endPos - startPos;
-        //float zRot = Mathf.Atan2(diff.x, diff.y) * Mathf.Rad2Deg;
-        //enemySprite.rotation = Quaternion.Euler(0, zRot + 90, 0);
-        //float diff = endPos.x - startPos.x;
         if (endPos.x < startPos.x && enemySprite.rotation.y != 0)
         {
             enemySprite.rotation = Quaternion.Euler(new Vector3(0, 0, 0));

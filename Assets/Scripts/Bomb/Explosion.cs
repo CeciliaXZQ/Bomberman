@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Explosion : MonoBehaviour
+public class Explosion : MonoBehaviour, IKillable
 {
     [SerializeField] private Collider2D colliderRef;
     float spawnTime = 0;

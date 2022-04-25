@@ -10,17 +10,22 @@ public class GameManager : MonoBehaviour
 
     public event Action<bool> gameStatus;
     public event Action updateScore;
+    public event Action<int> updateHealth;
     public event Action restartGame;
 
     [Range(3, 10)]
     public int enemyCount;
+    public int health;
     public Vector2 gridSize;
     public FixedBlocks fixedBlock;
     public BreakableBlocks breakableBlock;
     public FloorBlocks floorBlock;
+    public Door doorPrefab;
     public PlayerController playerController;
     public EnemyController enemyPrefab;
     public Bomb bombPrefab;
+    public SuperBomb superBombPrefab;
+    public UIController uiController;
 
     ILevelService levelService;
     IPlayerService playerService;
@@ -39,12 +44,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        playerService = new PlayerManager(playerController, bombPrefab, this);
+        uiController.SetGameManager(this);
+        playerService = new PlayerManager(playerController, bombPrefab, superBombPrefab,this);
         enemyService = new EnemyService(enemyPrefab, this);
-        levelService = new LevelService(fixedBlock, breakableBlock, floorBlock, playerService, enemyService);
+        levelService = new LevelService(fixedBlock, breakableBlock, floorBlock, doorPrefab, playerService, enemyService);
         enemyService.SetLevelService(levelService);
 
         levelService.GenerateLevel();
@@ -52,6 +57,8 @@ public class GameManager : MonoBehaviour
     public void SetGameStatus(bool gameWon) => gameStatus?.Invoke(gameWon);
 
     public void UpdateScore() => updateScore?.Invoke();
+
+    public void UpdateHealth(int health) => updateHealth?.Invoke(health);
 
     public void RestartGame()
     {

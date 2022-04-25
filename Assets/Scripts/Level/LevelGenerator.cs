@@ -12,19 +12,21 @@ public class LevelGenerator : MonoBehaviour
     private FixedBlocks fixedBlockPref;
     private FloorBlocks floorBlockPref;
     private BreakableBlocks breakableBlockPref;
+    private Door doorPref;
     private GameObject levelHolder;
     private IEnemyService enemyService;
 
     IPlayerService playerService;
     LevelService levelService;
 
-    public LevelGenerator(FixedBlocks fixedBlockPrefab, BreakableBlocks breakableBlockPrefab, FloorBlocks floorBlockPrefab, IPlayerService playerService, IEnemyService enemyService, LevelService levelService)
+    public LevelGenerator(FixedBlocks fixedBlockPrefab, BreakableBlocks breakableBlockPrefab, FloorBlocks floorBlockPrefab, Door doorPrefab, IPlayerService playerService, IEnemyService enemyService, LevelService levelService)
     {
         this.playerService = playerService;
         this.levelService = levelService;
         this.fixedBlockPref = fixedBlockPrefab;
         this.breakableBlockPref = breakableBlockPrefab;
         this.floorBlockPref = floorBlockPrefab;
+        this.doorPref = doorPrefab;
         this.enemyService = enemyService;
         gridWidth = (int)GameManager.singleton.gridSize.x;
         gridHeight = (int)GameManager.singleton.gridSize.y;
@@ -145,9 +147,23 @@ public class LevelGenerator : MonoBehaviour
             }
         }
     }
-
+    void GenerateDoor()
+    {
+        Vector2 doorPos = emptyGridList[0];
+        GameObject door = Object.Instantiate(doorPref.gameObject, doorPos, Quaternion.identity);
+        door.SetActive(false);
+        door.name = "Door[" + doorPos.x + "," + doorPos.y + "]";
+        gridArray[(int)doorPos.x, (int)doorPos.y] = door;
+        GameObject blockOnDoor = Object.Instantiate(breakableBlockPref.gameObject, doorPos, Quaternion.identity);
+        blockOnDoor.name = "Breakable[" + doorPos.x + "," + doorPos.y + "]";
+        blockOnDoor.GetComponent<BreakableBlocks>().SetLevelService(levelService);
+        blockOnDoor.GetComponent<BreakableBlocks>().SetDoorHiddenBehind(door);
+        emptyGridList.RemoveAt(0);
+        gridArray[(int)doorPos.x, (int)doorPos.y] = blockOnDoor;
+    }
     void GenerateBreakableBlock()
     {
+        GenerateDoor();
         int val = Random.Range(Mathf.CeilToInt(emptyGridList.Count / 6), Mathf.CeilToInt(emptyGridList.Count / 3));
         for (int i = 0; i < val; i++)
         {
