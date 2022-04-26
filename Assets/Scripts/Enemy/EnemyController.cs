@@ -36,7 +36,8 @@ public class EnemyController : MonoBehaviour, IDamagable, IKillable
         startTime = Time.time;
         currentGrid = nextGrid = transform.position;
         canMove = CanMove();
-        Health = 30;
+        MaxHealth = GameManager.singleton.enemyHealth;
+        Health = MaxHealth;
         if (canMove == true)
         {
             isCaged = false;

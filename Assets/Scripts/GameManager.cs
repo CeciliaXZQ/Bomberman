@@ -15,7 +15,8 @@ public class GameManager : MonoBehaviour
 
     [Range(3, 10)]
     public int enemyCount;
-    public int health;
+    public int palyerHealth;
+    public int enemyHealth;
     public Vector2 gridSize;
     public FixedBlocks fixedBlock;
     public BreakableBlocks breakableBlock;
@@ -47,7 +48,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         uiController.SetGameManager(this);
-        playerService = new PlayerManager(playerController, bombPrefab, superBombPrefab,this);
+        playerService = new PlayerManager(playerController, bombPrefab, superBombPrefab, this);
         enemyService = new EnemyService(enemyPrefab, this);
         levelService = new LevelService(fixedBlock, breakableBlock, floorBlock, doorPrefab, playerService, enemyService);
         enemyService.SetLevelService(levelService);

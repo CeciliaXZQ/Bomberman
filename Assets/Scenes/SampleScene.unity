@@ -770,7 +770,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyCount: 5
-  health: 0
+  palyerHealth: 50
+  enemyHealth: 50
   gridSize: {x: 20, y: 10}
   fixedBlock: {fileID: 165998374091953249, guid: 73cf34f5268e6b74480f76546471ca4f,
     type: 3}

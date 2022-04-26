@@ -67,6 +67,7 @@ public class UIController : MonoBehaviour
 
     void UpdateHealth(int health)
     {
+        Debug.Log("Health: " + health);
         healthText.text = "Health: " + health;
     }
 
@@ -88,10 +89,9 @@ public class UIController : MonoBehaviour
     {
         score = 000;
         TimeLeft = 200;
-        gameManager.playerController.health = 30;
         scoreText.text = "Score: " + score;
         timerText.text = "Time left: " + TimeLeft;
-        healthText.text = "Health: " + gameManager.playerController.health;
+        healthText.text = "Health: " + gameManager.palyerHealth;
         gamePanel.SetActive(true);
         gameOverPanel.SetActive(false);
     }

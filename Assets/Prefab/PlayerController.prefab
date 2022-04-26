@@ -52,6 +52,8 @@ MonoBehaviour:
   m_MoveSpeed: 5
   m_ContactOffset: 0.05
   m_MaxIterations: 2
+  health: 50
+  inDamage: 0
   m_MovementFilter:
     useTriggers: 0
     useLayerMask: 1

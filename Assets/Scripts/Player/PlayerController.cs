@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform playerSprite;
 
 
+
     public float m_MoveSpeed = 2.0f;
 
     public float m_ContactOffset = 0.05f;
@@ -34,7 +35,7 @@ public class PlayerController : MonoBehaviour
     {
         m_Rigidbody = GetComponent<Rigidbody2D>();
         FindObjectOfType<CameraController>().AssignTarget(this);
-        health = 30;
+        health = GameManager.singleton.palyerHealth;
     }
 
     // Update is called once per frame
@@ -127,6 +128,7 @@ public class PlayerController : MonoBehaviour
             hitCount++;
             if (hitCount <= 1)
             {
+                Debug.Log("Health: " + health);
                 Damage();
             }
         }
